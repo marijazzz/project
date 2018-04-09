@@ -1,5 +1,5 @@
 import sys
-from PyQt5.QtWidgets import QWidget, QDesktopWidget, QApplication
+from PyQt5.QtWidgets import QWidget, QDesktopWidget, QApplication, QGridLayout, QLabel
 from PyQt5.QtGui import QPainter, QColor, QFont
 from PyQt5.QtCore import Qt
 
@@ -27,12 +27,30 @@ class Example(QWidget):
         self.initUI()
 
     def initUI(self):
+        grid = QGridLayout()
 
-        self.resize(800, 700)
-        self.center()
+        x = 0
+        y = 0
 
-        self.setWindowTitle('Center')
+        self.text = "x: {0},  y: {1}".format(x, y)
+
+        self.label = QLabel(self.text, self)
+        grid.addWidget(self.label, 0, 0, Qt.AlignTop)
+
+        self.setMouseTracking(True)
+
+        self.setLayout(grid)
+
+        self.setGeometry(300, 300, 600, 600)
+        self.setWindowTitle('Event object')
         self.show()
+
+    def mouseMoveEvent(self, e):
+        x = e.x()
+        y = e.y()
+
+        text = "x: {0},  y: {1}".format(x, y)
+        self.label.setText(text)
 
     def center(self):
 
@@ -44,10 +62,11 @@ class Example(QWidget):
     def paintEvent(self, e):
         qp = QPainter()
         qp.begin(self)
-        u = Point(600, 300)
+        u = Point(x, y)
         u.draw(qp)
-        # self.draw_points(qp)
         qp.end()
+
+
 
 if __name__ == '__main__':
 

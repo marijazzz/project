@@ -29,13 +29,18 @@ class Example(QWidget):
         qr.moveCenter(cp)
         self.move(qr.topLeft())
 
-    def mouseMoveEvent(self, event):
-        x, y = float(event.x()), float(event.y())
+    def paintEvent(self, e):
         qp = QPainter()
         qp.begin(self)
-        u = d.Point(x, y)
+        u = d.Point(600, 300)
         u.draw(qp)
         # self.draw_points(qp)
         qp.end()
+
+
+
+    def mouseMoveEvent(self, event):
         self.label.setText('Mouse coords: ( %d : %d )' % (event.x(), event.y()))
-        return x, y
+
+
+
