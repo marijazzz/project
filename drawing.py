@@ -1,3 +1,5 @@
+#определение рисования
+
 from PyQt5.QtCore import Qt
 
 

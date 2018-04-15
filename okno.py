@@ -1,3 +1,5 @@
+#Все действия в окне
+
 import sys
 from PyQt5.QtWidgets import QWidget, QDesktopWidget, QApplication, QLabel
 from PyQt5.QtGui import QPainter, QColor, QFont
