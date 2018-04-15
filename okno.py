@@ -1,13 +1,13 @@
 import sys
 from PyQt5.QtWidgets import QWidget, QDesktopWidget, QApplication, QLabel
 from PyQt5.QtGui import QPainter, QColor, QFont
-from PyQt5.QtCore import Qt, pyqtSignal, QObject
+from PyQt5.QtCore import Qt, pyqtSignal, QObject, QEvent
 import drawing as d
 import random
 
 
 class Example(QWidget):
-
+    global x_g, y_g
     def __init__(self):
         super().__init__()
         self.initUI()
@@ -32,15 +32,22 @@ class Example(QWidget):
     def paintEvent(self, e):
         qp = QPainter()
         qp.begin(self)
-        u = d.Point(600, 300)
+        u = d.Point(e.x, e.y)
         u.draw(qp)
-        # self.draw_points(qp)
         qp.end()
 
+    def mouseMoveEvent(self, e):
+        x = e.x()
+        y = e.y()
 
 
-    def mouseMoveEvent(self, event):
-        self.label.setText('Mouse coords: ( %d : %d )' % (event.x(), event.y()))
+        text = "x: {0},  y: {1}".format(x, y)
+        self.label.setText(text)
+
+    def mousePressEvent(self, e):
+        if e.type() == QEvent.MouseButtonPress:
+            print('mousePressEvent')
+
 
 
 
