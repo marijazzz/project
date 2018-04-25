@@ -29,10 +29,12 @@ class Paint(Frame):
         phi = math.asin(x / l)
         for i in range(self.n):
             alpha = phi + i / self.n * 2 * math.pi
-            x_polar = l * math.sin(alpha)
-            y_polar = l * math.cos(alpha)
+            x_polar = l * math.sin(alpha) + 100
+            y_polar = l * math.cos(alpha) + 100
             self.canv.create_oval(x_polar - 1, y_polar - 1, x_polar + 1,
-                              y_polar + 1, fill=self.color, outline=self.color)
+                                  y_polar + 1, fill=self.color, outline=self.color)
+            print(x_polar, y_polar)
+
 
 
 
