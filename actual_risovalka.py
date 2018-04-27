@@ -1,10 +1,13 @@
 from tkinter import *
 import math
+
+
 class Paint(Frame):
 
     def __init__(self, parent):
         Frame.__init__(self, parent)
-        self.n = 5
+        self.n = 1
+        self.red, self.green, self.blue = 0, 0, 0
         self.parent = parent
         self.color = "black"
         self.brush_size = 2
@@ -42,33 +45,49 @@ class Paint(Frame):
         self.parent.title("рисовалка")
         self.pack(fill=BOTH, expand=1)
 
-        self.columnconfigure(6, weight=1)
+        self.columnconfigure(7, weight=1)
         self.rowconfigure(2, weight=1)
 
         self.canv = Canvas(self, bg="white")
-        self.canv.grid(row=2, column=0, columnspan=7, padx=5, pady=5, sticky=E + W + S + N)
+        self.canv.grid(row=2, column=0, columnspan=8, padx=5, pady=5, sticky=E + W + S + N)
         self.canv.bind("<B1-Motion>", self.draw)
 
 
         self.color_setting_btn = Button(self, text="Set color", width=10,command=lambda: self.set_color())
-        self.color_setting_btn.grid(row=1, column=1)
+        self.color_setting_btn.grid(row=0, column=6)
 
-        self.scale_red = Scale(self, from_=0, to=255)
+        self.scale_red = Scale(self, from_=0, to=255, orient=HORIZONTAL)
         self.scale_red.grid(row=0, column=0)
-
         self.label_red = Label(self, text='Red')
         self.label_red.grid(row = 0, column = 1)
-        self.scale_green = Scale(self, from_=0, to=255)
-        self.scale_green.grid(row=0, column=2)
 
+        self.scale_green = Scale(self, from_=0, to=255, orient=HORIZONTAL)
+        self.scale_green.grid(row=0, column=2)
         self.label_green = Label(self, text='Green')
         self.label_green.grid(row=0, column=3)
-        self.scale_blue = Scale(self, from_=0, to=255)
-        self.scale_blue.grid(row=0, column=4)
 
+        self.scale_blue = Scale(self, from_=0, to=255, orient=HORIZONTAL)
+        self.scale_blue.grid(row=0, column=4)
         self.label_blue = Label(self, text='Blue')
         self.label_blue.grid(row=0, column=5)
 
+        size_lab = Label(self, text="Symmetry ")
+        size_lab.grid(row=1, column=0, padx=6)
+
+        self.one_btn = Button(self, text="one", width=5, command=lambda: self.symmetry(1))
+        self.one_btn.grid(row=1, column=1)
+        self.two_btn = Button(self, text="two", width=5, command=lambda: self.symmetry(2))
+        self.two_btn.grid(row=1, column=2)
+        self.three_btn = Button(self, text="three", width=5, command=lambda: self.symmetry(3))
+        self.three_btn.grid(row=1, column=3)
+        self.four_btn = Button(self, text="four", width=5, command=lambda: self.symmetry(4))
+        self.four_btn.grid(row=1, column=4)
+        self.five_btn = Button(self, text="five", width=5, command=lambda: self.symmetry(5))
+        self.five_btn.grid(row=1, column=5)
+        self.six_btn = Button(self, text="six", width=5, command=lambda: self.symmetry(6))
+        self.six_btn.grid(row=1, column=6)
+        self.seven_btn = Button(self, text="seven", width=5, command=lambda: self.symmetry(7))
+        self.seven_btn.grid(row=1, column=7)
 
     def getting_values(self):
         self.red, self.green, self.blue = int(self.scale_red.get()), int(self.scale_green.get()), int(self.scale_blue.get())
@@ -76,6 +95,6 @@ class Paint(Frame):
 
 if __name__ == '__main__':
     root = Tk()
-    root.geometry("500x500")
+    root.geometry("800x700")
     app = Paint(root)
     root.mainloop()
