@@ -10,6 +10,7 @@ class Paint(Frame):
         self.red, self.green, self.blue = 0, 0, 0
         self.parent = parent
         self.color = "black"
+        self.color_canvas = "white"
         self.brush_size = 2
         self.setUI()
 
@@ -18,6 +19,11 @@ class Paint(Frame):
         tk_rgb = "#%02x%02x%02x" % (red, green, blue)
         self.color = tk_rgb
 
+    def set_color_canvas(self):
+        red, green, blue = self.getting_values()
+        tk_rgb = "#%02x%02x%02x" % (red, green, blue)
+        self.color_canvas = tk_rgb
+        self.canv(bg = self.color_canvas)
     def symmetry(self, n):
         self.n = n
 
@@ -32,6 +38,7 @@ class Paint(Frame):
         else:
             phi = math.atan2(x, y)
         for i in range(self.n):
+            self.parent.update_idletasks()
             alpha = phi + i / self.n * 2 * math.pi
             x_polar = l * math.sin(alpha) + self.canvas_width_center
             y_polar = -l * math.cos(alpha) + self.canvas_heigt_center
@@ -48,7 +55,10 @@ class Paint(Frame):
         self.columnconfigure(7, weight=1)
         self.rowconfigure(2, weight=1)
 
-        self.canv = Canvas(self, bg="white")
+        for i in range(8):
+            self.grid_columnconfigure(i, minsize = 100)
+
+        self.canv = Canvas(self, bg=self.color_canvas)
         self.canv.grid(row=2, column=0, columnspan=8, padx=5, pady=5, sticky=E + W + S + N)
         self.canv.bind("<B1-Motion>", self.draw)
 
@@ -76,18 +86,27 @@ class Paint(Frame):
 
         self.one_btn = Button(self, text="one", width=5, command=lambda: self.symmetry(1))
         self.one_btn.grid(row=1, column=1)
+
         self.two_btn = Button(self, text="two", width=5, command=lambda: self.symmetry(2))
         self.two_btn.grid(row=1, column=2)
+
         self.three_btn = Button(self, text="three", width=5, command=lambda: self.symmetry(3))
         self.three_btn.grid(row=1, column=3)
+
         self.four_btn = Button(self, text="four", width=5, command=lambda: self.symmetry(4))
         self.four_btn.grid(row=1, column=4)
+
         self.five_btn = Button(self, text="five", width=5, command=lambda: self.symmetry(5))
         self.five_btn.grid(row=1, column=5)
+
         self.six_btn = Button(self, text="six", width=5, command=lambda: self.symmetry(6))
         self.six_btn.grid(row=1, column=6)
+
         self.seven_btn = Button(self, text="seven", width=5, command=lambda: self.symmetry(7))
         self.seven_btn.grid(row=1, column=7)
+
+        self.clean_btn = Button(self, text="Clean", width=5, command=lambda: self.canv.delete('all'))
+        self.clean_btn.grid(row=0, column=7)
 
     def getting_values(self):
         self.red, self.green, self.blue = int(self.scale_red.get()), int(self.scale_green.get()), int(self.scale_blue.get())
@@ -95,6 +114,6 @@ class Paint(Frame):
 
 if __name__ == '__main__':
     root = Tk()
-    root.geometry("800x700")
+    root.geometry("800x800")
     app = Paint(root)
     root.mainloop()
