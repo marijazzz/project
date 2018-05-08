@@ -1,5 +1,6 @@
 from tkinter import *
 import math
+from PIL import Image, ImageDraw, ImageGrab
 
 
 class Paint(Frame):
@@ -13,7 +14,7 @@ class Paint(Frame):
         self.color_canvas = "white"
         self.brush_size = 2
         self.setUI()
-        self.file_name = 'untitled'
+        self.file_name = 'Untitled'
         self.type = 'circle'
 
     def set_color(self):
@@ -22,8 +23,8 @@ class Paint(Frame):
         self.color = tk_rgb
 
     def set_color_canvas(self):
-        red, green, blue = int(self.scale_red.get()), int(self.scale_green.get()), int(self.scale_blue.get())
-        tk_rgb = "#%02x%02x%02x" % (red, green, blue)
+        self.red, self.green, self.blue = int(self.scale_red.get()), int(self.scale_green.get()), int(self.scale_blue.get())
+        tk_rgb = "#%02x%02x%02x" % (self.red, self.green, self.blue)
         self.color_canvas = tk_rgb
         self.canv.config(bg = self.color_canvas)
         self.parent.update_idletasks()
@@ -94,10 +95,10 @@ class Paint(Frame):
             y_polar = -l * math.cos(alpha) + self.canvas_heigt_center
             self.canv.create_oval(x_polar - 1, y_polar - 1, x_polar + 1,
                                   y_polar + 1, fill=self.color, outline=self.color)
-
     def file_save(self):
         self.file_name = self.e.get()
-        self.canv.postscript(file = self.file_name, colormode = 'color')
+        ImageGrab.grab((self.canv.winfo_rootx(), self.canv.winfo_rooty(), self.canv.winfo_width(),
+                        self.canv.winfo_height())).save(self.file_name + '.png')
 
 
     def setUI(self):
@@ -108,17 +109,17 @@ class Paint(Frame):
         self.rowconfigure(2, weight=1)
 
         for i in range(8):
-            self.grid_columnconfigure(i, minsize = 100)
+            self.grid_columnconfigure(i, minsize = 130)
 
         self.canv = Canvas(self, bg=self.color_canvas)
         self.canv.grid(row=2, column=0, columnspan=10, padx=5, pady=5, sticky=E + W + S + N)
         self.canv.bind("<B1-Motion>", self.draw)
 
-        color_setting_btn = Button(self, text="Set color", width=10,command=lambda: self.set_color())
+        color_setting_btn = Button(self, text="Set color", width=16,command=lambda: self.set_color())
         color_setting_btn.grid(row=0, column=6)
 
-        color_setting_btn = Button(self, text="Set canvas color", width=14, command=lambda: self.set_color_canvas())
-        color_setting_btn.grid(row=0, column=8)
+        color_setting_btn = Button(self, text="Set canvas color", width=16, command=lambda: self.set_color_canvas())
+        color_setting_btn.grid(row=0, column=7)
 
         self.scale_red = Scale(self, from_=0, to=255, orient=HORIZONTAL)
         self.scale_red.grid(row=0, column=0)
@@ -148,25 +149,27 @@ class Paint(Frame):
         get_symmetry_btn = Button(self, text="Set symmetry number", width=16, command=lambda: self.symmetry())
         get_symmetry_btn.grid(row=1, column=2)
 
-        clean_btn = Button(self, text="Clean", width=5, command=lambda: self.canv.delete('all'))
-        clean_btn.grid(row=0, column=7)
+        clean_btn = Button(self, text="Clean", width=16, command=lambda: self.canv.delete('all'))
+        clean_btn.grid(row=0, column=8)
 
         Label(self, text="File name").grid(row=1, column = 3)
         self.e = Entry(self)
         self.e.grid(row=1, column=4)
         self.e.insert(10,"Untitled")
 
-        file_btn = Button(self, text="Save", width=5, command=lambda: self.file_save())
+        file_btn = Button(self, text="Save", width=16, command=lambda: self.file_save())
         file_btn.grid(row=1, column=5)
 
-        circle_btn = Button(self, text="Draw circlesr", width=14, command=lambda: self.set_type('circle'))
+        circle_btn = Button(self, text="Draw circles", width=16, command=lambda: self.set_type('circle'))
         circle_btn.grid(row=1, column=6)
 
-        triangle_btn = Button(self, text="Draw triangles", width=14, command=lambda: self.set_type('triangle'))
+        triangle_btn = Button(self, text="Draw triangles", width=16, command=lambda: self.set_type('triangle'))
         triangle_btn.grid(row=1, column=7)
 
-        rectangle_btn = Button(self, text="SDraw rectangles", width=14, command=lambda: self.set_type('rectangle'))
+        rectangle_btn = Button(self, text="Draw rectangles", width=16, command=lambda: self.set_type('rectangle'))
         rectangle_btn.grid(row=1, column=8)
+
+
 
     def set_type(self, n):
         if n == 'circle':
