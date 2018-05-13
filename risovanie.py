@@ -6,6 +6,10 @@ from PIL import ImageGrab
 class Paint(Frame):
 
     def __init__(self, parent):
+        """
+        Задаем основные переменные, используемые сразу в нескольких функциях,
+        вызываем рабучую функцию, которая задает все виджеты нашего приложегния.
+        """
         Frame.__init__(self, parent)
         self.n = 1  # Колличество симметрий
         self.red, self.green, self.blue = 0, 0, 0  # Цвета в формате RGB
@@ -19,21 +23,20 @@ class Paint(Frame):
         self.canvas_height_center = 0  # Центр по высоте canvas
         self.set_ui()  # Вызов функции задания виджитов
 
-        '''Задаем основные переменные, используемые сразу в нескольких функциях,
-        вызываем рабучую функцию, которая задает все виджеты нашего приложегния. 
-        '''
-
     def set_color_canvas(self):
+        """
+        Функция, меняющая цвет canvas.
+        """
         self.color_canvas = "#%02x%02x%02x" % (int(self.scale_red.get()),
                                                int(self.scale_green.get()),
                                                int(self.scale_blue.get()))
         # Получаем цвет в нужном нам формате.
         self.canvas.config(bg=self.color_canvas)
-        ''' Функция, меняющая цвет canvas. 
-        
-        '''
 
     def draw(self, event):
+        """
+        Получаем размер и цвет рисуемых фигур, их тип
+        """
         self.n = int(self.scale_symmetry.get())
         self.color = "#%02x%02x%02x" % (int(self.scale_red.get()),
                                         int(self.scale_green.get()),
@@ -46,12 +49,7 @@ class Paint(Frame):
             self.draw_triangle(event)
         if self.type == 'rectangle':
             self.draw_rectangle(event)
-
-        print(self.type)
         # Разделение по типам рисуемой фигуры.
-        '''
-        Получаем размер и цвет рисуемых фигур, их тип
-        '''
 
     def draw_triangle(self, event):  # Функция рисования треугольников
         self.canvas_width_center = self.canvas.winfo_width() / 2
@@ -78,9 +76,6 @@ class Paint(Frame):
                                        y_polar - self.brush_size, x_polar - self.brush_size,
                                        y_polar - self.brush_size, fill=self.color, outline=self.color)
             # Рисование треугольника.
-    '''
-    Отрисовка треугольников
-    '''
 
     def draw_rectangle(self, event):  # Функция для рисования квадратов.
         self.canvas_width_center = self.canvas.winfo_width() / 2
@@ -107,9 +102,6 @@ class Paint(Frame):
                                          x_polar + self.brush_size, y_polar + self.brush_size,
                                          fill=self.color, outline=self.color)
             # Рисование квадрата.
-    '''
-    Отрисовка квадратов
-    '''
 
     def draw_circle(self, event):  # Функция для рисования кругов.
         self.canvas_width_center = self.canvas.winfo_width() / 2
@@ -136,20 +128,18 @@ class Paint(Frame):
                                     x_polar + self.brush_size, y_polar + self.brush_size,
                                     fill=self.color, outline=self.color)
             # Рисование квадрата.
-    '''
-    Отрисовка кругов.
-    '''
+
     def file_save(self):  # Функция сохранения файла png.
         self.file_name = self.e.get()
         # Получение имени файла.
         ImageGrab.grab((self.canvas.winfo_rootx(), self.canvas.winfo_rooty(), self.canvas.winfo_width(),
                         self.canvas.winfo_height())).save(self.file_name + '.png')
         # Запечатление и сохранение рисунка в папке приложения.
-    '''
-    Сохранение файлов
-    '''
 
     def set_ui(self):
+        """
+        Определение виджетов и их месторасположения
+        """
         self.parent.title("Симметричное рисование")  # Имя окна
         self.pack(fill=BOTH, expand=1)  # Размещение элементов на родительском окне
         self.columnconfigure(8, weight=1)
@@ -209,21 +199,19 @@ class Paint(Frame):
         self.scale_brush.grid(row=1, column=5)
         label_brush = Label(self, text='Brush size')
         label_brush.grid(row=1, column=6)
-                # Расположение шкалы размера кисти и ее названия.
-        '''
-        Определение виджетов и их месторасположения
-        '''
+        # Расположение шкалы размера кисти и ее названия.
 
     def set_type(self, n):
+        """
+        Задание типа фигуры
+        """
         if n == 'circle':
             self.type = 'triangle'
         if n == 'rectangle':
             self.type = 'rectangle'
         if n == 'triangle':
             self.type = 'triangle'
-    '''
-    Задание типа фигуры
-    '''
+
 
 if __name__ == '__main__':
     root = Tk()
